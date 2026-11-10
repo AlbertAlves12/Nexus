@@ -42,7 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         />
       )}
 
-      {/* Sidebar Principal (Fixa em Desktop, Gaveta em Mobile) */}
+      {/* Sidebar Principal (Fixa) */}
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#1E2330] text-slate-200 flex flex-col justify-between p-5 shrink-0 transform transition-transform duration-200 ease-in-out ${
           sidebarAberta ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
@@ -57,7 +57,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
               <div>
                 <span className="font-bold text-lg text-white tracking-tight block">sistema piloto</span>
-                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider block">White-Label Edition</span>
+                <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider block">
+                  White-Label Edition
+                </span>
               </div>
             </div>
             <button
@@ -68,7 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
           </div>
 
-          {/* Seletor de Espaço de Trabalho (Tenant) */}
+          {/* Seletor de Espaço de Trabalho */}
           <div className="bg-[#272D3D] p-3.5 rounded-xl flex items-center gap-3 border border-slate-700/50 shadow-inner">
             <div className="w-9 h-9 bg-[#C86235] text-white font-bold rounded-lg flex items-center justify-center text-sm shadow-sm">
               A
@@ -113,7 +115,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </nav>
         </div>
 
-        {/* Bloco Inferior: Card Informativo & Sair */}
+        {/* Bloco Inferior */}
         <div className="space-y-4 pt-4 border-t border-slate-700/60">
           <div className="bg-[#272D3D]/80 p-4 rounded-xl border border-slate-700/50 shadow-sm">
             <div className="w-7 h-7 bg-[#C86235]/20 rounded-lg flex items-center justify-center text-[#C86235] mb-2.5">
@@ -134,10 +136,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      {/* Conteúdo Central Ajustável */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
-        {/* Header Superior Responsivo */}
-        <header className="h-16 px-4 sm:px-6 lg:px-8 border-b border-slate-200/80 bg-white/70 backdrop-blur-md flex items-center justify-between sticky top-0 z-30">
+      {/* Conteúdo Central em 100% da Largura (Sem travas max-w) */}
+      <main className="flex-1 flex flex-col min-w-0 w-full overflow-x-hidden">
+        {/* Header Superior Fluido */}
+        <header className="h-16 px-6 lg:px-10 border-b border-slate-200/80 bg-white/70 backdrop-blur-md flex items-center justify-between sticky top-0 z-30 w-full">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarAberta(true)}
@@ -146,7 +148,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Menu className="w-5 h-5" />
             </button>
 
-            {/* Trilha de Navegação */}
             <div className="text-xs text-slate-500 font-medium hidden sm:flex items-center gap-2">
               <span className="text-slate-400">Sistema Piloto</span>
               <span className="text-slate-300">/</span>
@@ -156,10 +157,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           </div>
 
-          {/* Barra de Busca Global e Perfil */}
-          <div className="flex items-center gap-3 sm:gap-5">
-            {/* Campo de Busca Simulado */}
-            <div className="hidden md:flex items-center gap-2 bg-slate-100/80 border border-slate-200 px-3 py-1.5 rounded-xl text-xs text-slate-400 w-64 lg:w-80">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="hidden md:flex items-center gap-2 bg-slate-100/80 border border-slate-200 px-3.5 py-1.5 rounded-xl text-xs text-slate-400 w-72 lg:w-96">
               <Search className="w-3.5 h-3.5 text-slate-400" />
               <span className="flex-1 truncate">Buscar clientes, faturas ou chamados...</span>
               <kbd className="hidden lg:inline-flex items-center gap-0.5 bg-white border border-slate-200 text-slate-400 px-1.5 py-0.5 rounded text-[10px] font-medium shadow-2xs">
@@ -167,14 +166,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </kbd>
             </div>
 
-            {/* Botão Notificações */}
             <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#C86235] rounded-full ring-2 ring-white" />
             </button>
 
-            {/* Perfil do Usuário */}
-            <div className="flex items-center gap-3 pl-2 sm:pl-4 border-l border-slate-200">
+            <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-bold text-slate-900 leading-tight">Albert Santos</p>
                 <p className="text-[10px] text-slate-400">Administrador</p>
@@ -186,8 +183,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        {/* Área de Conteúdo Expansível em Telas Grandes (max-w-[1600px]) */}
-        <div className="p-4 sm:p-6 lg:p-8 xl:p-10 flex-1 max-w-[1600px] w-full mx-auto space-y-8">
+        {/* Conteúdo Fluido (Preenche 100% da tela de ponta a ponta) */}
+        <div className="p-6 lg:p-10 flex-1 w-full space-y-8">
           {children}
         </div>
       </main>
