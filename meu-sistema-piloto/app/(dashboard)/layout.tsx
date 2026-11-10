@@ -33,23 +33,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#FAF8F5] font-sans antialiased">
+    <div className="flex min-h-screen bg-[#FAF8F5] font-sans antialiased print:bg-white print:min-h-0">
       {/* Overlay para Mobile */}
       {sidebarAberta && (
         <div
           onClick={() => setSidebarAberta(false)}
-          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm print:hidden"
         />
       )}
 
-      {/* Sidebar Principal (Fixa) */}
+      {/* Sidebar Principal (Oculta ao gerar PDF) */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#1E2330] text-slate-200 flex flex-col justify-between p-5 shrink-0 transform transition-transform duration-200 ease-in-out ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-72 bg-[#1E2330] text-slate-200 flex flex-col justify-between p-5 shrink-0 transform transition-transform duration-200 ease-in-out print:hidden ${
           sidebarAberta ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         <div className="space-y-6">
-          {/* Logo do Sistema White-Label */}
           <div className="flex items-center justify-between px-2 py-1">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-[#C86235] text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-md shadow-[#C86235]/20">
@@ -70,7 +69,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
           </div>
 
-          {/* Seletor de Espaço de Trabalho */}
           <div className="bg-[#272D3D] p-3.5 rounded-xl flex items-center gap-3 border border-slate-700/50 shadow-inner">
             <div className="w-9 h-9 bg-[#C86235] text-white font-bold rounded-lg flex items-center justify-center text-sm shadow-sm">
               A
@@ -81,7 +79,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           </div>
 
-          {/* Menu de Navegação */}
           <nav className="space-y-1.5">
             <p className="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
               Módulos Principais
@@ -115,7 +112,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </nav>
         </div>
 
-        {/* Bloco Inferior */}
         <div className="space-y-4 pt-4 border-t border-slate-700/60">
           <div className="bg-[#272D3D]/80 p-4 rounded-xl border border-slate-700/50 shadow-sm">
             <div className="w-7 h-7 bg-[#C86235]/20 rounded-lg flex items-center justify-center text-[#C86235] mb-2.5">
@@ -136,10 +132,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      {/* Conteúdo Central em 100% da Largura (Sem travas max-w) */}
-      <main className="flex-1 flex flex-col min-w-0 w-full overflow-x-hidden">
-        {/* Header Superior Fluido */}
-        <header className="h-16 px-6 lg:px-10 border-b border-slate-200/80 bg-white/70 backdrop-blur-md flex items-center justify-between sticky top-0 z-30 w-full">
+      {/* Área Principal */}
+      <main className="flex-1 flex flex-col min-w-0 w-full overflow-x-hidden print:overflow-visible print:p-0">
+        {/* Header Superior (Oculto ao gerar PDF) */}
+        <header className="h-16 px-6 lg:px-10 border-b border-slate-200/80 bg-white/70 backdrop-blur-md flex items-center justify-between sticky top-0 z-30 w-full print:hidden">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarAberta(true)}
@@ -183,8 +179,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        {/* Conteúdo Fluido (Preenche 100% da tela de ponta a ponta) */}
-        <div className="p-6 lg:p-10 flex-1 w-full space-y-8">
+        {/* Conteúdo da Página */}
+        <div className="p-6 lg:p-10 flex-1 w-full space-y-8 print:p-0 print:m-0 print:w-full">
           {children}
         </div>
       </main>
