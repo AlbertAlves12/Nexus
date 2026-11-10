@@ -89,70 +89,67 @@ export default function FinanceiroPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 font-sans">
-      {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+    <div className="w-full space-y-8 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 w-full">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Gestão Financeira</h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Controle de fluxo de caixa, receitas e despesas operacionais.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Gestão Financeira</h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Controle de fluxo de caixa, faturamento recorrente e lançamentos.
           </p>
         </div>
 
         <button
           onClick={() => setModalAberto(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-sm font-medium rounded-xl transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-sm shadow-[#C86235]/30"
         >
           <Plus className="w-4 h-4" />
           Novo Lançamento
         </button>
       </div>
 
-      {/* Cartões de Indicadores */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-2 w-full">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
             <span>Receita Mensal</span>
             <ArrowUpRight className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="text-2xl font-bold text-slate-900">R$ 7.300,00</div>
-          <p className="text-[11px] text-emerald-600 font-medium">+15% em relação ao mês anterior</p>
+          <div className="text-3xl font-extrabold text-slate-900">R$ 7.300,00</div>
+          <p className="text-xs text-emerald-600 font-semibold pt-2 border-t border-slate-100">+15% em relação ao mês anterior</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-2 w-full">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
             <span>Despesas</span>
             <ArrowDownRight className="w-4 h-4 text-rose-500" />
           </div>
-          <div className="text-2xl font-bold text-slate-900">R$ 770,00</div>
-          <p className="text-[11px] text-slate-400">Despesas fixas e variáveis</p>
+          <div className="text-3xl font-extrabold text-slate-900">R$ 770,00</div>
+          <p className="text-xs text-slate-400 pt-2 border-t border-slate-100">Despesas operacionais</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-2 w-full">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
             <span>Saldo Líquido</span>
             <Wallet className="w-4 h-4 text-[#C86235]" />
           </div>
-          <div className="text-2xl font-bold text-slate-900">R$ 6.530,00</div>
-          <p className="text-[11px] text-slate-400">Resultado operacional</p>
+          <div className="text-3xl font-extrabold text-slate-900">R$ 6.530,00</div>
+          <p className="text-xs text-slate-400 pt-2 border-t border-slate-100">Resultado do exercício</p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-sm space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-2 w-full">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider">
             <span>A Receber</span>
             <DollarSign className="w-4 h-4 text-amber-500" />
           </div>
-          <div className="text-2xl font-bold text-slate-900">R$ 4.800,00</div>
-          <p className="text-[11px] text-amber-600 font-medium">1 contrato pendente</p>
+          <div className="text-3xl font-extrabold text-slate-900">R$ 4.800,00</div>
+          <p className="text-xs text-amber-600 font-semibold pt-2 border-t border-slate-100">1 contrato pendente</p>
         </div>
       </div>
 
-      {/* Filtros e Tabela de Lançamentos */}
-      <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden w-full">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-slate-400" />
-            <span className="text-xs font-semibold text-slate-600">Filtrar por:</span>
+            <span className="text-xs font-bold text-slate-600">Filtrar por:</span>
             <div className="flex gap-1">
               <button
                 onClick={() => setFiltroTipo('todos')}
@@ -183,53 +180,54 @@ export default function FinanceiroPage() {
           <span className="text-xs text-slate-400">{transacoesFiltradas.length} lançamentos</span>
         </div>
 
-        <table className="w-full text-left text-sm text-slate-600">
-          <thead className="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b border-slate-100">
-            <tr>
-              <th className="px-6 py-3.5">Descrição</th>
-              <th className="px-6 py-3.5">Categoria</th>
-              <th className="px-6 py-3.5">Data</th>
-              <th className="px-6 py-3.5">Status</th>
-              <th className="px-6 py-3.5 text-right">Valor</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {transacoesFiltradas.map((t) => (
-              <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-6 py-4 font-semibold text-slate-900">{t.descricao}</td>
-                <td className="px-6 py-4 text-xs text-slate-500">{t.categoria}</td>
-                <td className="px-6 py-4 text-xs text-slate-400">{t.data}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${
-                      t.status === 'Pago' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left text-sm text-slate-600">
+            <thead className="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b border-slate-100">
+              <tr>
+                <th className="px-6 py-4">Descrição</th>
+                <th className="px-6 py-4">Categoria</th>
+                <th className="px-6 py-4">Data</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4 text-right">Valor</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {transacoesFiltradas.map((t) => (
+                <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4 font-bold text-slate-900">{t.descricao}</td>
+                  <td className="px-6 py-4 text-xs text-slate-500">{t.categoria}</td>
+                  <td className="px-6 py-4 text-xs text-slate-400">{t.data}</td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        t.status === 'Pago' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                      }`}
+                    >
+                      {t.status === 'Pago' ? <CheckCircle2 className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                      {t.status}
+                    </span>
+                  </td>
+                  <td
+                    className={`px-6 py-4 text-right font-bold ${
+                      t.tipo === 'receita' ? 'text-emerald-600' : 'text-rose-600'
                     }`}
                   >
-                    {t.status === 'Pago' ? <CheckCircle2 className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
-                    {t.status}
-                  </span>
-                </td>
-                <td
-                  className={`px-6 py-4 text-right font-semibold ${
-                    t.tipo === 'receita' ? 'text-emerald-600' : 'text-rose-600'
-                  }`}
-                >
-                  {t.tipo === 'receita' ? `+ ${t.valor}` : `- ${t.valor}`}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    {t.tipo === 'receita' ? `+ ${t.valor}` : `- ${t.valor}`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Modal de Novo Lançamento */}
       {modalAberto && (
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full space-y-4 shadow-xl">
             <h3 className="text-lg font-bold text-slate-900">Novo Lançamento Financeiro</h3>
             <form onSubmit={handleCadastrar} className="space-y-3">
               <div>
-                <label className="text-xs font-medium text-slate-600">Descrição</label>
+                <label className="text-xs font-semibold text-slate-600">Descrição</label>
                 <input
                   type="text"
                   required
@@ -242,7 +240,7 @@ export default function FinanceiroPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-medium text-slate-600">Tipo</label>
+                  <label className="text-xs font-semibold text-slate-600">Tipo</label>
                   <select
                     value={tipo}
                     onChange={(e) => setTipo(e.target.value as 'receita' | 'despesa')}
@@ -253,7 +251,7 @@ export default function FinanceiroPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-600">Valor (R$)</label>
+                  <label className="text-xs font-semibold text-slate-600">Valor (R$)</label>
                   <input
                     type="text"
                     required
@@ -266,7 +264,7 @@ export default function FinanceiroPage() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-600">Categoria</label>
+                <label className="text-xs font-semibold text-slate-600">Categoria</label>
                 <input
                   type="text"
                   value={categoria}
@@ -286,7 +284,7 @@ export default function FinanceiroPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#C86235] text-white text-sm font-medium rounded-lg hover:bg-[#b0532b]"
+                  className="px-4 py-2 bg-[#C86235] text-white text-sm font-semibold rounded-lg hover:bg-[#b0532b]"
                 >
                   Salvar Lançamento
                 </button>
