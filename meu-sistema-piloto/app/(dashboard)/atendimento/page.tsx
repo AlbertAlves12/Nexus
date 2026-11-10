@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { MessageSquare, PhoneCall, Send, Clock, CheckCircle2, User, Plus, Smartphone, QrCode, FileText, ChevronRight } from 'lucide-react';
+import { MessageSquare, PhoneCall, Send, Clock, CheckCircle2, Smartphone, QrCode, FileText, ChevronRight } from 'lucide-react';
 
 interface Ticket {
   id: string;
@@ -74,17 +74,15 @@ export default function AtendimentoPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 font-sans">
-      {/* Cabeçalho */}
-      <div className="flex items-center justify-between">
+    <div className="w-full space-y-6 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 w-full">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Central de Atendimento & Solicitações</h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Central de Atendimento</h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
             Gestão unificada de chamados via WhatsApp e Portal do Cliente.
           </p>
         </div>
 
-        {/* Abas Superiores */}
         <div className="flex gap-1 bg-slate-200/60 p-1 rounded-xl">
           <button
             onClick={() => setAbaAtiva('chamados')}
@@ -100,7 +98,7 @@ export default function AtendimentoPage() {
               abaAtiva === 'whatsapp' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Conexão WhatsApp API
+            Conexão WhatsApp
           </button>
           <button
             onClick={() => setAbaAtiva('portal')}
@@ -114,9 +112,8 @@ export default function AtendimentoPage() {
       </div>
 
       {abaAtiva === 'chamados' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[620px]">
-          {/* Lista de Chamados */}
-          <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden flex flex-col">
+        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6 h-[650px] w-full">
+          <div className="lg:col-span-1 xl:col-span-1 bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col w-full">
             <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Chamados Ativos</span>
               <span className="text-xs bg-[#C86235]/10 text-[#C86235] px-2 py-0.5 rounded-full font-semibold">
@@ -157,29 +154,25 @@ export default function AtendimentoPage() {
             </div>
           </div>
 
-          {/* Área do Chat de Atendimento */}
-          <div className="md:col-span-2 bg-white rounded-2xl border border-slate-200/70 shadow-sm flex flex-col overflow-hidden">
+          <div className="lg:col-span-2 xl:col-span-3 bg-white rounded-2xl border border-slate-200/80 shadow-sm flex flex-col overflow-hidden w-full">
             <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">{ticketSelecionado.cliente}</h3>
                 <p className="text-xs text-slate-500">{ticketSelecionado.empresa} • {ticketSelecionado.servico}</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full font-medium">
-                  {ticketSelecionado.canal} Conectado
-                </span>
-              </div>
+              <span className="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-medium">
+                {ticketSelecionado.canal} Conectado
+              </span>
             </div>
 
-            {/* Mensagens */}
-            <div className="p-4 flex-1 overflow-y-auto space-y-3 bg-[#FAF8F5]/50">
+            <div className="p-6 flex-1 overflow-y-auto space-y-4 bg-[#FAF8F5]/50">
               {historicoMensagens.map((msg, index) => (
                 <div
                   key={index}
                   className={`flex flex-col ${msg.remetente === 'atendente' ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-md px-4 py-2.5 rounded-2xl text-xs leading-relaxed ${
+                    className={`max-w-xl px-4 py-3 rounded-2xl text-xs leading-relaxed ${
                       msg.remetente === 'atendente'
                         ? 'bg-[#1E2330] text-white rounded-br-none'
                         : msg.remetente === 'sistema'
@@ -194,18 +187,17 @@ export default function AtendimentoPage() {
               ))}
             </div>
 
-            {/* Input de Envio */}
-            <form onSubmit={handleEnviarMensagem} className="p-3 border-t border-slate-100 bg-white flex gap-2">
+            <form onSubmit={handleEnviarMensagem} className="p-4 border-t border-slate-100 bg-white flex gap-3">
               <input
                 type="text"
                 value={mensagem}
                 onChange={(e) => setMensagem(e.target.value)}
                 placeholder="Digite a resposta para o cliente..."
-                className="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#C86235]/20 focus:border-[#C86235]"
+                className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#C86235]/20 focus:border-[#C86235]"
               />
               <button
                 type="submit"
-                className="px-4 py-2 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
+                className="px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
               >
                 <Send className="w-3.5 h-3.5" />
                 Enviar
@@ -216,21 +208,21 @@ export default function AtendimentoPage() {
       )}
 
       {abaAtiva === 'whatsapp' && (
-        <div className="bg-white p-8 rounded-2xl border border-slate-200/70 shadow-sm max-w-2xl mx-auto space-y-6 text-center">
-          <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto">
-            <Smartphone className="w-7 h-7" />
+        <div className="bg-white p-10 rounded-2xl border border-slate-200/80 shadow-sm w-full space-y-6 text-center">
+          <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto">
+            <Smartphone className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900">Integração WhatsApp Business API</h3>
-            <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-              Conecte o número do cliente para automação de mensagens, envio de faturas e atendimento centralizado na plataforma.
+            <h3 className="text-xl font-bold text-slate-900">Integração WhatsApp Business API</h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-lg mx-auto">
+              Conecte o número da empresa para automação de mensagens, envio de faturas e atendimento centralizado.
             </p>
           </div>
 
-          <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 inline-block space-y-3">
-            <QrCode className="w-32 h-32 text-slate-800 mx-auto" />
-            <p className="text-xs font-semibold text-slate-600">Escaneie o QR Code para parear o número</p>
-            <span className="inline-block text-[10px] text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full font-semibold">
+          <div className="p-8 bg-slate-50 rounded-2xl border border-slate-200 inline-block space-y-4">
+            <QrCode className="w-40 h-40 text-slate-800 mx-auto" />
+            <p className="text-xs font-bold text-slate-700">Escaneie o QR Code para parear o número</p>
+            <span className="inline-block text-xs text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full font-semibold">
               Servidor Pronto para Conexão
             </span>
           </div>
@@ -238,34 +230,34 @@ export default function AtendimentoPage() {
       )}
 
       {abaAtiva === 'portal' && (
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm space-y-6">
+        <div className="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm w-full space-y-6">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900">Portal do Cliente (Visão do App)</h3>
-              <p className="text-xs text-slate-500">Módulo onde seus clientes enviam solicitações de serviços e acompanham pedidos.</p>
+              <h3 className="text-lg font-bold text-slate-900">Portal do Cliente (Visão do App)</h3>
+              <p className="text-xs text-slate-500">Interface onde os clientes finais solicitam serviços e acompanham pedidos.</p>
             </div>
             <span className="text-xs bg-[#C86235]/10 text-[#C86235] px-3 py-1 rounded-full font-bold">
               White-Label Habilitado
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <FileText className="w-5 h-5 text-[#C86235]" />
-              <h4 className="text-xs font-bold text-slate-800">Solicitação de Documentos</h4>
-              <p className="text-[11px] text-slate-500">Emissão de certidões, contratos e guias de imposto.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+            <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+              <FileText className="w-6 h-6 text-[#C86235]" />
+              <h4 className="text-sm font-bold text-slate-800">Solicitação de Documentos</h4>
+              <p className="text-xs text-slate-500">Emissão de certidões, contratos e guias fiscais em tempo real.</p>
             </div>
 
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <PhoneCall className="w-5 h-5 text-emerald-600" />
-              <h4 className="text-xs font-bold text-slate-800">Suporte Prioritário</h4>
-              <p className="text-[11px] text-slate-500">Abertura de chamados com alerta direto no WhatsApp do atendente.</p>
+            <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+              <PhoneCall className="w-6 h-6 text-emerald-600" />
+              <h4 className="text-sm font-bold text-slate-800">Suporte Prioritário</h4>
+              <p className="text-xs text-slate-500">Abertura de chamados com notificação direta no WhatsApp do atendente.</p>
             </div>
 
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
-              <ChevronRight className="w-5 h-5 text-blue-600" />
-              <h4 className="text-xs font-bold text-slate-800">Acompanhamento em Tempo Real</h4>
-              <p className="text-[11px] text-slate-500">O cliente visualiza o status de cada pedido enviado.</p>
+            <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+              <ChevronRight className="w-6 h-6 text-blue-600" />
+              <h4 className="text-sm font-bold text-slate-800">Status em Tempo Real</h4>
+              <p className="text-xs text-slate-500">Acompanhamento transparente das etapas de cada solicitação.</p>
             </div>
           </div>
         </div>
