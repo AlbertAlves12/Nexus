@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Wallet, BarChart3, Settings, Sparkles, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Wallet, MessageSquare, BarChart3, Settings, Sparkles, LogOut } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -10,6 +10,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const menu = [
     { label: 'Visão geral', href: '/', icon: LayoutDashboard },
     { label: 'Clientes', href: '/clientes', icon: Users },
+    { label: 'Atendimento', href: '/atendimento', icon: MessageSquare },
     { label: 'Financeiro', href: '/financeiro', icon: Wallet },
     { label: 'Relatórios', href: '/relatorios', icon: BarChart3 },
     { label: 'Configurações', href: '/configuracoes', icon: Settings },
@@ -67,9 +68,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="w-7 h-7 bg-[#C86235]/20 rounded-lg flex items-center justify-center text-[#C86235] mb-3">
               <Sparkles className="w-4 h-4" />
             </div>
-            <h4 className="text-sm font-semibold text-white mb-1">Pequenos passos, boas relações.</h4>
+            <h4 className="text-sm font-semibold text-white mb-1">Modelo White-Label</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Mantenha seus contatos organizados e o próximo passo sempre à vista.
+              Plataforma pronta para personalização e licenciamento por contrato.
             </p>
           </div>
 
