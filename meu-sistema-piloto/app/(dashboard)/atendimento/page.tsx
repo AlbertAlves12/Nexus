@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { MessageSquare, PhoneCall, Send, Clock, CheckCircle2, Smartphone, QrCode, FileText, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { MessageSquare, PhoneCall, Send, Smartphone, QrCode, FileText, ChevronRight } from 'lucide-react';
 
 interface Ticket {
   id: string;
@@ -51,25 +51,51 @@ const TICKETS_DEMO: Ticket[] = [
   },
 ];
 
+const MENSAGENS_INICIAIS = [
+  { remetente: 'cliente', texto: 'Olá, bom dia! Preciso do relatório de fechamento fiscal.', hora: '10:35' },
+  { remetente: 'sistema', texto: 'Atendimento iniciado por Albert Santos via WhatsApp.', hora: '10:38' },
+  { remetente: 'cliente', texto: 'Preciso do relatório de fechamento até o fim do dia.', hora: '10:42' },
+];
+
 export default function AtendimentoPage() {
-  const [tickets, setTickets] = useState<Ticket[]>(TICKETS_DEMO);
+  const [tickets] = useState<Ticket[]>(TICKETS_DEMO);
   const [ticketSelecionado, setTicketSelecionado] = useState<Ticket>(TICKETS_DEMO[0]);
   const [abaAtiva, setAbaAtiva] = useState<'chamados' | 'whatsapp' | 'portal'>('chamados');
   const [mensagem, setMensagem] = useState('');
-  const [historicoMensagens, setHistoricoMensagens] = useState([
-    { remetente: 'cliente', texto: 'Olá, bom dia! Preciso do relatório de fechamento fiscal.', hora: '10:35' },
-    { remetente: 'sistema', texto: 'Atendimento iniciado por Albert Santos via WhatsApp.', hora: '10:38' },
-    { remetente: 'cliente', texto: 'Preciso do relatório de fechamento até o fim do dia.', hora: '10:42' },
-  ]);
+  const [historicoMensagens, setHistoricoMensagens] = useState(MENSAGENS_INICIAIS);
+  const [carregado, setCarregado] = useState(false);
+
+  // Carregar histórico do localStorage
+  useEffect(() => {
+    const salvos = localStorage.getItem('piloto_atendimento_msg');
+    if (salvos) {
+      try {
+        setHistoricoMensagens(JSON.parse(salvos));
+      } catch (e) {
+        console.error('Erro ao carregar mensagens', e);
+      }
+    }
+    setCarregado(true);
+  }, []);
+
+  // Salvar no localStorage
+  useEffect(() => {
+    if (carregado) {
+      localStorage.setItem('piloto_atendimento_msg', JSON.stringify(historicoMensagens));
+    }
+  }, [historicoMensagens, carregado]);
 
   const handleEnviarMensagem = (e: React.FormEvent) => {
     e.preventDefault();
     if (!mensagem.trim()) return;
 
-    setHistoricoMensagens([
-      ...historicoMensagens,
-      { remetente: 'atendente', texto: mensagem, hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
-    ]);
+    const novaMensagem = {
+      remetente: 'atendente',
+      texto: mensagem,
+      hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    setHistoricoMensagens([...historicoMensagens, novaMensagem]);
     setMensagem('');
   };
 
@@ -86,7 +112,7 @@ export default function AtendimentoPage() {
         <div className="flex gap-1 bg-slate-200/60 p-1 rounded-xl">
           <button
             onClick={() => setAbaAtiva('chamados')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               abaAtiva === 'chamados' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -94,7 +120,7 @@ export default function AtendimentoPage() {
           </button>
           <button
             onClick={() => setAbaAtiva('whatsapp')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               abaAtiva === 'whatsapp' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -102,7 +128,7 @@ export default function AtendimentoPage() {
           </button>
           <button
             onClick={() => setAbaAtiva('portal')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               abaAtiva === 'portal' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -136,7 +162,7 @@ export default function AtendimentoPage() {
                   </div>
                   <p className="text-xs text-slate-500 font-medium truncate mt-0.5">{ticket.empresa}</p>
                   <p className="text-xs text-slate-600 truncate mt-2">{ticket.ultimaMensagem}</p>
-                  
+
                   <div className="flex items-center gap-2 mt-3">
                     <span className={`text-[10px] px-2 py-0.5 rounded-md font-medium ${
                       ticket.canal === 'WhatsApp' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'
@@ -197,7 +223,7 @@ export default function AtendimentoPage() {
               />
               <button
                 type="submit"
-                className="px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
+                className="px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 Enviar
