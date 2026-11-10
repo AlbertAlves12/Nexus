@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, ArrowUpRight, ArrowDownRight, DollarSign, Wallet, Filter, CheckCircle2, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, ArrowUpRight, ArrowDownRight, DollarSign, Wallet, Filter, CheckCircle2, Clock, Trash2 } from 'lucide-react';
 
 interface Transacao {
   id: string;
@@ -54,6 +54,7 @@ const TRANSACOES_INICIAIS: Transacao[] = [
 
 export default function FinanceiroPage() {
   const [transacoes, setTransacoes] = useState<Transacao[]>(TRANSACOES_INICIAIS);
+  const [carregado, setCarregado] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState<'todos' | 'receita' | 'despesa'>('todos');
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -61,6 +62,26 @@ export default function FinanceiroPage() {
   const [valor, setValor] = useState('');
   const [tipo, setTipo] = useState<'receita' | 'despesa'>('receita');
   const [categoria, setCategoria] = useState('');
+
+  // Carregar dados do localStorage
+  useEffect(() => {
+    const dadosSalvos = localStorage.getItem('piloto_financeiro');
+    if (dadosSalvos) {
+      try {
+        setTransacoes(JSON.parse(dadosSalvos));
+      } catch (e) {
+        console.error('Erro ao carregar transações', e);
+      }
+    }
+    setCarregado(true);
+  }, []);
+
+  // Salvar alterações no localStorage
+  useEffect(() => {
+    if (carregado) {
+      localStorage.setItem('piloto_financeiro', JSON.stringify(transacoes));
+    }
+  }, [transacoes, carregado]);
 
   const transacoesFiltradas = transacoes.filter((t) => {
     if (filtroTipo === 'todos') return true;
@@ -72,7 +93,7 @@ export default function FinanceiroPage() {
     if (!descricao || !valor) return;
 
     const nova: Transacao = {
-      id: String(transacoes.length + 1),
+      id: String(Date.now()),
       descricao,
       categoria: categoria || 'Geral',
       valor: `R$ ${valor}`,
@@ -88,6 +109,12 @@ export default function FinanceiroPage() {
     setModalAberto(false);
   };
 
+  const handleExcluir = (id: string) => {
+    if (confirm('Deseja excluir este lançamento?')) {
+      setTransacoes(transacoes.filter((t) => t.id !== id));
+    }
+  };
+
   return (
     <div className="w-full space-y-8 font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 w-full">
@@ -100,7 +127,7 @@ export default function FinanceiroPage() {
 
         <button
           onClick={() => setModalAberto(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-sm shadow-[#C86235]/30"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-sm shadow-[#C86235]/30 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           Novo Lançamento
@@ -153,7 +180,7 @@ export default function FinanceiroPage() {
             <div className="flex gap-1">
               <button
                 onClick={() => setFiltroTipo('todos')}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   filtroTipo === 'todos' ? 'bg-[#1E2330] text-white' : 'text-slate-600 hover:bg-slate-200/60'
                 }`}
               >
@@ -161,7 +188,7 @@ export default function FinanceiroPage() {
               </button>
               <button
                 onClick={() => setFiltroTipo('receita')}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   filtroTipo === 'receita' ? 'bg-emerald-700 text-white' : 'text-slate-600 hover:bg-slate-200/60'
                 }`}
               >
@@ -169,7 +196,7 @@ export default function FinanceiroPage() {
               </button>
               <button
                 onClick={() => setFiltroTipo('despesa')}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
                   filtroTipo === 'despesa' ? 'bg-rose-700 text-white' : 'text-slate-600 hover:bg-slate-200/60'
                 }`}
               >
@@ -189,6 +216,7 @@ export default function FinanceiroPage() {
                 <th className="px-6 py-4">Data</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Valor</th>
+                <th className="px-6 py-4 text-right">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -213,6 +241,15 @@ export default function FinanceiroPage() {
                     }`}
                   >
                     {t.tipo === 'receita' ? `+ ${t.valor}` : `- ${t.valor}`}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <button
+                      onClick={() => handleExcluir(t.id)}
+                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                      title="Excluir lançamento"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
