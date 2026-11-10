@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, Search, Building2, Phone, Mail, CheckCircle2, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, Search, Building2, Phone, Mail, CheckCircle2, Clock, Trash2 } from 'lucide-react';
 
 interface Cliente {
   id: string;
@@ -45,6 +45,7 @@ const CLIENTES_INICIAIS: Cliente[] = [
 
 export default function ClientesPage() {
   const [clientes, setClientes] = useState<Cliente[]>(CLIENTES_INICIAIS);
+  const [carregado, setCarregado] = useState(false);
   const [busca, setBusca] = useState('');
   const [modalAberto, setModalAberto] = useState(false);
 
@@ -52,6 +53,26 @@ export default function ClientesPage() {
   const [novaEmpresa, setNovaEmpresa] = useState('');
   const [novoEmail, setNovoEmail] = useState('');
   const [novoTelefone, setNovoTelefone] = useState('');
+
+  // Carregar dados do localStorage
+  useEffect(() => {
+    const dadosSalvos = localStorage.getItem('piloto_clientes');
+    if (dadosSalvos) {
+      try {
+        setClientes(JSON.parse(dadosSalvos));
+      } catch (e) {
+        console.error('Erro ao carregar clientes do localStorage', e);
+      }
+    }
+    setCarregado(true);
+  }, []);
+
+  // Salvar alterações no localStorage
+  useEffect(() => {
+    if (carregado) {
+      localStorage.setItem('piloto_clientes', JSON.stringify(clientes));
+    }
+  }, [clientes, carregado]);
 
   const clientesFiltrados = clientes.filter(
     (c) =>
@@ -64,7 +85,7 @@ export default function ClientesPage() {
     if (!novoNome || !novaEmpresa) return;
 
     const novo: Cliente = {
-      id: String(clientes.length + 1),
+      id: String(Date.now()),
       nome: novoNome,
       empresa: novaEmpresa,
       email: novoEmail || 'contato@cliente.com',
@@ -81,6 +102,12 @@ export default function ClientesPage() {
     setModalAberto(false);
   };
 
+  const handleExcluir = (id: string) => {
+    if (confirm('Deseja realmente remover este cliente?')) {
+      setClientes(clientes.filter((c) => c.id !== id));
+    }
+  };
+
   return (
     <div className="w-full space-y-6 font-sans">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 w-full">
@@ -93,7 +120,7 @@ export default function ClientesPage() {
 
         <button
           onClick={() => setModalAberto(true)}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-sm shadow-[#C86235]/30"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-sm shadow-[#C86235]/30 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           Novo Cliente
@@ -120,6 +147,7 @@ export default function ClientesPage() {
                 <th className="px-6 py-4">Contato</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Contrato</th>
+                <th className="px-6 py-4 text-right">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -160,6 +188,15 @@ export default function ClientesPage() {
                   </td>
                   <td className="px-6 py-4 font-bold text-slate-900">
                     {cliente.valorContrato}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <button
+                      onClick={() => handleExcluir(cliente.id)}
+                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                      title="Excluir cliente"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
