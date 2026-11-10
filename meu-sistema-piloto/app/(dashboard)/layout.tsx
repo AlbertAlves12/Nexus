@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -18,11 +18,86 @@ import {
   Menu,
   X,
   CheckSquare,
+  Check,
+  Trash2,
 } from 'lucide-react';
+
+interface Notificacao {
+  id: string;
+  titulo: string;
+  descricao: string;
+  tempo: string;
+  lida: boolean;
+  tipo: 'atendimento' | 'financeiro' | 'atividade';
+}
+
+const NOTIFICACOES_INICIAIS: Notificacao[] = [
+  {
+    id: '1',
+    titulo: 'Novo Chamado no WhatsApp',
+    descricao: 'TechInovação solicitou a 2ª via da fatura.',
+    tempo: 'Há 5 min',
+    lida: false,
+    tipo: 'atendimento',
+  },
+  {
+    id: '2',
+    titulo: 'Fatura #104 Quitada via PIX',
+    descricao: 'Santos & Associados confirmou o pagamento de R$ 2.500,00.',
+    tempo: 'Há 15 min',
+    lida: false,
+    tipo: 'financeiro',
+  },
+  {
+    id: '3',
+    titulo: 'Nova Solicitação no Portal',
+    descricao: 'Distribuidora Borborema abriu um chamado fiscal.',
+    tempo: 'Há 45 min',
+    lida: false,
+    tipo: 'atendimento',
+  },
+];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarAberta, setSidebarAberta] = useState(false);
+  const [notificacoesAbertas, setNotificacoesAbertas] = useState(false);
+  const [notificacoes, setNotificacoes] = useState<Notificacao[]>(NOTIFICACOES_INICIAIS);
+  const [carregado, setCarregado] = useState(false);
+
+  // Carregar Notificações do localStorage
+  useEffect(() => {
+    const salvos = localStorage.getItem('piloto_notificacoes');
+    if (salvos) {
+      try {
+        setNotificacoes(JSON.parse(salvos));
+      } catch (e) {
+        console.error('Erro ao carregar notificações', e);
+      }
+    }
+    setCarregado(true);
+  }, []);
+
+  // Salvar Notificações no localStorage
+  useEffect(() => {
+    if (carregado) {
+      localStorage.setItem('piloto_notificacoes', JSON.stringify(notificacoes));
+    }
+  }, [notificacoes, carregado]);
+
+  // Contadores dinâmicos
+  const naoLidasCount = notificacoes.filter((n) => !n.lida).length;
+  const atendimentoNaoLidosCount = notificacoes.filter((n) => n.tipo === 'atendimento' && !n.lida).length;
+
+  const handleMarcarComoLida = (id: string) => {
+    setNotificacoes(
+      notificacoes.map((n) => (n.id === id ? { ...n, lida: true } : n))
+    );
+  };
+
+  const handleMarcarTodasComoLidas = () => {
+    setNotificacoes(notificacoes.map((n) => ({ ...n, lida: true })));
+  };
 
   const menu = [
     { label: 'Visão geral', href: '/', icon: LayoutDashboard },
@@ -103,9 +178,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <Icon className={`w-4 h-4 ${isActive ? 'text-[#C86235]' : 'text-slate-400'}`} />
                     {item.label}
                   </div>
-                  {item.label === 'Atendimento' && (
-                    <span className="text-[10px] font-bold bg-[#C86235] text-white px-2 py-0.5 rounded-full">
-                      3
+                  {item.label === 'Atendimento' && atendimentoNaoLidosCount > 0 && (
+                    <span className="text-[10px] font-bold bg-[#C86235] text-white px-2 py-0.5 rounded-full animate-pulse">
+                      {atendimentoNaoLidosCount}
                     </span>
                   )}
                 </Link>
@@ -163,11 +238,80 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </kbd>
             </div>
 
-            <button className="relative p-2 text-slate-500 hover:bg-slate-100 rounded-xl transition-colors">
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#C86235] rounded-full ring-2 ring-white" />
-            </button>
+            {/* Ícone do Sininho com Popover de Notificações */}
+            <div className="relative">
+              <button
+                onClick={() => setNotificacoesAbertas(!notificacoesAbertas)}
+                className="relative p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                title="Notificações"
+              >
+                <Bell className="w-4 h-4" />
+                {naoLidasCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#C86235] rounded-full ring-2 ring-white animate-pulse" />
+                )}
+              </button>
 
+              {/* Popover das Notificações */}
+              {notificacoesAbertas && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setNotificacoesAbertas(false)}
+                  />
+                  <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white rounded-2xl border border-slate-200/80 shadow-2xl z-50 p-4 space-y-3">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-xs font-bold text-slate-900">Notificações do Sistema</h4>
+                        {naoLidasCount > 0 && (
+                          <span className="text-[10px] font-bold bg-[#C86235] text-white px-2 py-0.5 rounded-full">
+                            {naoLidasCount} novas
+                          </span>
+                        )}
+                      </div>
+                      {naoLidasCount > 0 && (
+                        <button
+                          onClick={handleMarcarTodasComoLidas}
+                          className="text-[11px] font-semibold text-[#C86235] hover:underline cursor-pointer"
+                        >
+                          Marcar todas como lidas
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+                      {notificacoes.map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => handleMarcarComoLida(item.id)}
+                          className={`p-3 rounded-xl border transition-all cursor-pointer ${
+                            item.lida
+                              ? 'bg-slate-50/50 border-slate-100 opacity-60'
+                              : 'bg-orange-50/30 border-[#C86235]/30 hover:bg-orange-50/60'
+                          }`}
+                        >
+                          <div className="flex justify-between items-start gap-2">
+                            <h5 className="text-xs font-bold text-slate-900">{item.titulo}</h5>
+                            <span className="text-[10px] text-slate-400 shrink-0">{item.tempo}</span>
+                          </div>
+                          <p className="text-xs text-slate-600 mt-1 leading-snug">{item.descricao}</p>
+                          {!item.lida && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#C86235] mt-2">
+                              <Check className="w-3 h-3" /> Clique para marcar como lida
+                            </span>
+                          )}
+                        </div>
+                      ))}
+
+                      {notificacoes.length === 0 && (
+                        <p className="text-xs text-slate-400 text-center py-6">Nenhuma notificação por enquanto.</p>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Perfil do Usuário */}
             <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
               <div className="text-right hidden sm:block">
                 <p className="text-xs font-bold text-slate-900 leading-tight">Albert Santos</p>
