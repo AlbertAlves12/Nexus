@@ -2,8 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, BarChart3, Settings, Sparkles } from 'lucide-react';
-import SairButton from '@/components/layout/SairButton';
+import { LayoutDashboard, Users, Wallet, BarChart3, Settings, Sparkles, LogOut } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -11,12 +10,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const menu = [
     { label: 'Visão geral', href: '/', icon: LayoutDashboard },
     { label: 'Clientes', href: '/clientes', icon: Users },
+    { label: 'Financeiro', href: '/financeiro', icon: Wallet },
     { label: 'Relatórios', href: '/relatorios', icon: BarChart3 },
     { label: 'Configurações', href: '/configuracoes', icon: Settings },
   ];
 
   return (
     <div className="flex min-h-screen bg-[#FAF8F5]">
+      {/* Sidebar */}
       <aside className="w-64 bg-[#1E2330] text-slate-200 flex flex-col justify-between p-4 shrink-0 font-sans">
         <div className="space-y-6">
           <div className="flex items-center gap-3 px-2 py-1">
@@ -73,11 +74,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <div className="pt-2 border-t border-slate-700/60 flex items-center justify-between px-1">
-            <SairButton />
+            <button className="flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-white transition-colors">
+              <LogOut className="w-4 h-4" />
+              Sair da conta
+            </button>
           </div>
         </div>
       </aside>
 
+      {/* Conteúdo Central */}
       <main className="flex-1 flex flex-col min-w-0">
         <header className="h-14 px-8 flex items-center justify-between border-b border-slate-200/80 bg-white/60 backdrop-blur-sm">
           <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
