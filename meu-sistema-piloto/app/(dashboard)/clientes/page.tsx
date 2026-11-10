@@ -82,25 +82,25 @@ export default function ClientesPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 font-sans">
-      <div className="flex items-center justify-between">
+    <div className="w-full space-y-6 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 w-full">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Carteira de Clientes</h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Gerencie seus contatos e empresas.
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Carteira de Clientes</h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Gerencie contatos, empresas parceiras e contratos ativos.
           </p>
         </div>
 
         <button
           onClick={() => setModalAberto(true)}
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-sm font-medium rounded-xl transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#C86235] hover:bg-[#b0532b] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-sm shadow-[#C86235]/30"
         >
           <Plus className="w-4 h-4" />
           Novo Cliente
         </button>
       </div>
 
-      <div className="relative">
+      <div className="relative w-full">
         <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
         <input
           type="text"
@@ -111,59 +111,61 @@ export default function ClientesPage() {
         />
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
-        <table className="w-full text-left text-sm text-slate-600">
-          <thead className="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b border-slate-100">
-            <tr>
-              <th className="px-6 py-3.5">Cliente / Empresa</th>
-              <th className="px-6 py-3.5">Contato</th>
-              <th className="px-6 py-3.5">Status</th>
-              <th className="px-6 py-3.5">Contrato</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {clientesFiltrados.map((cliente) => (
-              <tr key={cliente.id} className="hover:bg-slate-50/50 transition-colors">
-                <td className="px-6 py-4">
-                  <div className="font-semibold text-slate-900">{cliente.nome}</div>
-                  <div className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                    <Building2 className="w-3 h-3" />
-                    {cliente.empresa}
-                  </div>
-                </td>
-                <td className="px-6 py-4 space-y-0.5">
-                  <div className="text-xs text-slate-500 flex items-center gap-1.5">
-                    <Mail className="w-3 h-3 text-slate-400" />
-                    {cliente.email}
-                  </div>
-                  <div className="text-xs text-slate-500 flex items-center gap-1.5">
-                    <Phone className="w-3 h-3 text-slate-400" />
-                    {cliente.telefone}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${
-                      cliente.status === 'Ativo'
-                        ? 'bg-emerald-50 text-emerald-700'
-                        : 'bg-amber-50 text-amber-700'
-                    }`}
-                  >
-                    {cliente.status === 'Ativo' ? (
-                      <CheckCircle2 className="w-3 h-3" />
-                    ) : (
-                      <Clock className="w-3 h-3" />
-                    )}
-                    {cliente.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 font-medium text-slate-900">
-                  {cliente.valorContrato}
-                </td>
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden w-full">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left text-sm text-slate-600">
+            <thead className="bg-slate-50 text-xs font-semibold text-slate-500 uppercase border-b border-slate-100">
+              <tr>
+                <th className="px-6 py-4">Cliente / Empresa</th>
+                <th className="px-6 py-4">Contato</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Contrato</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {clientesFiltrados.map((cliente) => (
+                <tr key={cliente.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="font-bold text-slate-900">{cliente.nome}</div>
+                    <div className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                      <Building2 className="w-3 h-3" />
+                      {cliente.empresa}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 space-y-0.5">
+                    <div className="text-xs text-slate-500 flex items-center gap-1.5">
+                      <Mail className="w-3 h-3 text-slate-400" />
+                      {cliente.email}
+                    </div>
+                    <div className="text-xs text-slate-500 flex items-center gap-1.5">
+                      <Phone className="w-3 h-3 text-slate-400" />
+                      {cliente.telefone}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        cliente.status === 'Ativo'
+                          ? 'bg-emerald-50 text-emerald-700'
+                          : 'bg-amber-50 text-amber-700'
+                      }`}
+                    >
+                      {cliente.status === 'Ativo' ? (
+                        <CheckCircle2 className="w-3 h-3" />
+                      ) : (
+                        <Clock className="w-3 h-3" />
+                      )}
+                      {cliente.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 font-bold text-slate-900">
+                    {cliente.valorContrato}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {modalAberto && (
@@ -172,7 +174,7 @@ export default function ClientesPage() {
             <h3 className="text-lg font-bold text-slate-900">Cadastrar Novo Cliente</h3>
             <form onSubmit={handleCadastrar} className="space-y-3">
               <div>
-                <label className="text-xs font-medium text-slate-600">Nome do Contato</label>
+                <label className="text-xs font-semibold text-slate-600">Nome do Contato</label>
                 <input
                   type="text"
                   required
@@ -183,7 +185,7 @@ export default function ClientesPage() {
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-600">Empresa</label>
+                <label className="text-xs font-semibold text-slate-600">Empresa</label>
                 <input
                   type="text"
                   required
@@ -194,7 +196,7 @@ export default function ClientesPage() {
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-600">E-mail</label>
+                <label className="text-xs font-semibold text-slate-600">E-mail</label>
                 <input
                   type="email"
                   value={novoEmail}
@@ -204,7 +206,7 @@ export default function ClientesPage() {
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-600">Telefone</label>
+                <label className="text-xs font-semibold text-slate-600">Telefone</label>
                 <input
                   type="text"
                   value={novoTelefone}
@@ -223,7 +225,7 @@ export default function ClientesPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#C86235] text-white text-sm font-medium rounded-lg hover:bg-[#b0532b]"
+                  className="px-4 py-2 bg-[#C86235] text-white text-sm font-semibold rounded-lg hover:bg-[#b0532b]"
                 >
                   Salvar Cliente
                 </button>
